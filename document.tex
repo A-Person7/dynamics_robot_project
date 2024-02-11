@@ -18,14 +18,6 @@
 \begin{document}
     \maketitle
     \section*{Problem Description}
-     
-	\section*{Assumptions}
-	
-	\begin{itemize}
-		\item We are on earth and that $g = 9.81 \frac{m}{s^2}$
-		\item There is negligable drag
-		\item There is negligable flex in the robot arm
-	\end{itemize}
 	
     \tab Given an egg in free fall, we want to determine a smooth path over time that a robotic arm can follow to catch the egg without it breaking. The robotic arm consists of a linear actuator and a motor that rotates the linear actuator such that it's motion can be fully described by $r\left(t\right)$ and $\theta\left(t\right)$, which are the radius as a function of time and the angle as a function of time, respectively. In the name of good faith and best practice, all angles discussed will be in radians. Together with the physical constraints imposed on the system that lock the robotic arm's catcher onto a straight line, these both fully define a function $y\left(t\right)$, which describes the height of the catcher. Helpfully, $y\left(t\right)$ fully describes both $r\left(t\right)$ and $\theta\left(t\right)$, so our primary goal, first and foremost, is to solve for a valid $y\left(t\right)$ function. The arm must start at rest 0.6 meters above the table surface. To smoothly catch the egg, the arm must match the position, velocity, and acceleration of the egg at some instance around 0.5 meters above the table. The egg starts at rest 0.8 meters above the table.\newline \newline 
     In other words, $y: \left[0, \infty\right) \to \left(-\infty, 0\right)
