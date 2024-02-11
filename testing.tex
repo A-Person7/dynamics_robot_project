@@ -7,12 +7,26 @@
 \usepackage[margin=1.00in]{geometry}
 \usepackage{tabto}
 \usepackage{tikz}
+\usepackage{pgfplots}
 
+
+\pgfplotsset{compat = newest}
 
 \title{Testing for plots and whatnot}
 \author{Lucas Johnston and Brendan }
 \date{\today}
 
 \begin{document}
-    \section*{Graphs:}
+
+    \begin{tikzpicture}
+        \begin{axis}[
+                xmin = 0,
+                xmax = 0.9,
+                ymin = 0,
+                ymax = 0.8,
+                ]
+            \addplot[domain = 0:0.37095212]{160.3981*x^4-105.7772*x^3+14.7141*x^2+0.4};
+            \addplot[domain = 0.37095212:0.9]{0.0625198478831};
+        \end{axis}
+    \end{tikzpicture}   
 \end{document}
