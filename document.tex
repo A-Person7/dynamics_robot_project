@@ -26,7 +26,7 @@
     \section*{Problem Description}
 	
     Given an egg in free fall, we want to determine a smooth path over time that a robotic arm can follow to catch the egg without it breaking. The robotic arm consists of a linear actuator and a motor that rotates the linear actuator such that it's motion can be fully described by $r\left(t\right)$ and $\theta\left(t\right)$, which are the radius as a function of time and the angle as a function of time, respectively. In the name of good faith and best practice, all angles discussed will be in radians. Together with the physical constraints imposed on the system that lock the robotic arm's catcher onto a straight line, these both fully define a function $y\left(t\right)$, which describes the height of the catcher. Helpfully, $y\left(t\right)$ fully describes both $r\left(t\right)$ and $\theta\left(t\right)$, so our primary goal, first and foremost, is to solve for a valid $y\left(t\right)$ function. The arm must start at rest 0.6 meters above the table surface. To smoothly catch the egg, the arm must match the position, velocity, and acceleration of the egg at some instance around 0.5 meters above the table. The egg starts at rest 0.8 meters above the table.\newline \newline 
-    In other words, $y:\left[0, \infty\right) \to \left(-\infty, 0\right)
+    In other words, if $f\left(t\right)$ represents the position of the egg, $y:\left[0, \infty\right) \to \left(-\infty, 0\right)
 $ must satisfy the following conditions:
     \begin{equation}
         y\left(0\right) = 0.8
@@ -34,28 +34,44 @@ $ must satisfy the following conditions:
     \begin{equation}
         \dot{y}\left(0\right) = 0
     \end{equation}
-	% 
-	% 	\section*{Assumptions}
-	% 
-	% \begin{itemize}
-    %     \item We are on earth and that $g = 9.81 \sfrac{\textrm{m}}{\textrm{s}^2}$
-	% 	\item There is negligible drag
-	% 	\item There is negligible flex in the robot arm
-	% \end{itemize}
+    \begin{equation}
+        {y}\left(t_1\right) = f\left(t_1\right)
+    \end{equation}
+    \begin{equation}
+        \dot{y}\left(t_1\right) = \dot{f}\left(t_1\right)
+    \end{equation}
+    \begin{equation}
+        \ddot{y}\left(t_1\right) = \ddot{f}\left(t_1\right)
+    \end{equation}
+    \begin{equation}
+        \exists \textrm{ }t > t_1 \textrm{      such that  } \dot{y}\left(t\right) = 0 
+    \end{equation}
+	
+		\section*{Assumptions}
+	
+	\begin{itemize}
+        \item We are on earth and that $g = 9.81 \sfrac{\textrm{m}}{\textrm{s}^2}$
+		\item There is negligible drag
+		\item There is negligible flex in the robot arm
+        \item We have enough precision in our control of the motors to implement any arbitrary, smooth function that won't crash the arm
+	\end{itemize}
 
-	% \section*{Solution Methods}
+	\section*{Solution Methods}
 	
-		Our solution Methods were to first find the poisition, velocity and acceleration of the egg at the point where we wanted to start the catch. We then used this data as well as the initial conditions of the arm to find a function where the arm would match these data points. We had 5 data points, so we constructed it as a constant snap function (which gave us 5 unknowns to solve for). We then used this resulting function and parameterized it to find $r\left(t\right)$ and $\theta\left(t\right)$. These are the position functions of our actuators of the robotics arm and describe the motion of it.
-	% 
-	% \section*{Solution}
+		Our solution Methods were to first find the position, velocity and acceleration of the egg at the point where we wanted to start the catch. We then used this data as well as the initial conditions of the arm to find a function where the arm would match these data points. We had 5 data points, so we constructed it as a constant snap function (which gave us 5 unknowns to solve for). We then used this resulting function and parameterized it to find $r\left(t\right)$ and $\theta\left(t\right)$. These are the position functions of our actuators of the robotics arm and describe the motion of it.
+
+        If you look at equations 1 through 5, you'll see we essentially have five defined points our function has to go through (given a value for $t_1$). In the wise words of Brook Taylor, "Everything (smooth) is a polynomial if you have enough terms."\footnote{He did not actually say this.}
+	 
+	\section*{Solution}
 	
-	% 
-	% \section*{Solution Validation}
+    Our solution meet all the requirements given by the problem statement. We only broke the motion of $y\left(t\right)$ into two segments for the egg. There is the motion before contact with the robot where it is accelerating down, and after when it starts to slow down. The robot arm itself traveling on this path was made to be one segment only as we extrapolated the motion of slowing down the egg to before contact with it. This solution is a very smooth way to do it, as we ended up dealing with a constant snap function. Because it is fundamentally a constant function over the path it also is a very simple solution to the problem.
+
 	
-	% 
-	% \section*{Discussion of Results}
-	% 
-	% Our solution meet all the requirements given by the problem statement. We only broke the motion of $y\left(t\right)$ into two segments for the egg. There is the motion before contact with the robot where it is accelerating down, and after when it starts to slow down. The robot arm itself traveling on this path was made to be one segment only as we extrapolated the motion of slowing down the egg to before contact with it. This solution is a very smooth way to do it, as we ended up dealing with a constant snap function. Because it is fundamentally a constant function over the path it also is a very simple solution to the problem.
+	\section*{Solution Validation}
+	
+	\section*{Discussion of Results}
+	
+	Our solution meet all the requirements given by the problem statement. We only broke the motion of $y\left(t\right)$ into two segments for the egg. There is the motion before contact with the robot where it is accelerating down, and after when it starts to slow down. The robot arm itself traveling on this path was made to be one segment only as we extrapolated the motion of slowing down the egg to before contact with it. This solution is a very smooth way to do it, as we ended up dealing with a constant snap function. Because it is fundamentally a constant function over the path it also is a very simple solution to the problem.
 	% needs data of actuators
 	
 \end{document}
