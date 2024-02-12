@@ -8,34 +8,32 @@
 \usepackage[margin=1.00in]{geometry}
 % \usepackage{tabto}
 \usepackage{tikz}
-
+\usepackage[thinc]{esdiff}
 
 \begin{document}
 
-\ConfName{Proceedings of the Dynamics 2024\linebreak Very Local Mechanical Engineering Congress and Exposition}
-\ConfDate{Spring, 2024} % update 
-\ConfCity{Spokane, WA}
+    \ConfName{Proceedings of the Dynamics 2024\linebreak Very Local Mechanical Engineering Congress and Exposition}
+    \ConfDate{Spring, 2024} % update 
+    \ConfCity{Spokane, WA}
 
     \title{Robot Arm Project}
-    \SetAuthors{Lucas Johnston\affil{1}, Brendan Moskalik\affil{1}}
+    \SetAuthors{Lucas Johnston\affil{1}\JointFirstAuthor, Brendan Moskalik\affil{1}\JointFirstAuthor}
 	\SetAffiliation{1}{Gonzaga University, Spokane, WA}
 
-
-\maketitle
+    \maketitle
 
     \section*{Problem Description}
 	
     Given an egg in free fall, we want to determine a smooth path over time that a robotic arm can follow to catch the egg without it breaking. The robotic arm consists of a linear actuator and a motor that rotates the linear actuator such that it's motion can be fully described by $r\left(t\right)$ and $\theta\left(t\right)$, which are the radius as a function of time and the angle as a function of time, respectively. In the name of good faith and best practice, all angles discussed will be in radians. Together with the physical constraints imposed on the system that lock the robotic arm's catcher onto a straight line, these both fully define a function $y\left(t\right)$, which describes the height of the catcher. Helpfully, $y\left(t\right)$ fully describes both $r\left(t\right)$ and $\theta\left(t\right)$, so our primary goal, first and foremost, is to solve for a valid $y\left(t\right)$ function. The arm must start at rest 0.6 meters above the table surface. To smoothly catch the egg, the arm must match the position, velocity, and acceleration of the egg at some instance around 0.5 meters above the table. The egg starts at rest 0.8 meters above the table.\newline \newline 
-    In other words, if $f\left(t\right)$ represents the position of the egg, $y:\left[0, \infty\right) \to \left(-\infty, 0\right)
-$ must satisfy the following conditions:
+    For our purposes, we will define the origin to be O, the pivot point of the robot arm. Let $f\left(t\right)$ be the function representing the free fall of the egg. Both $y$ and $f$ are defined as the height above this origin point, in meters. This means $y$ must satisfy the following conditions:
     \begin{equation}
-        y\left(0\right) = 0.8
+        y\left(0\right) = 0.4
     \end{equation}
     \begin{equation}
         \dot{y}\left(0\right) = 0
     \end{equation}
     \begin{equation}
-        {y}\left(t_1\right) = f\left(t_1\right)
+        {y}\left(t_1\right) = f\left(t_1\right) 
     \end{equation}
     \begin{equation}
         \dot{y}\left(t_1\right) = \dot{f}\left(t_1\right)
@@ -44,13 +42,17 @@ $ must satisfy the following conditions:
         \ddot{y}\left(t_1\right) = \ddot{f}\left(t_1\right)
     \end{equation}
     \begin{equation}
-        \exists \textrm{ }t > t_1 \textrm{      such that  } \dot{y}\left(t\right) = 0 
+        \exists \textrm{ }t > t_1 \textrm{      s.t.  } \dot{y}\left(t\right) = 0 
+    \end{equation}
+    Here $t_1$ is defined as the time when the robot arm catches the egg.
+    \begin{equation}
+        \exists\textrm{  } t_1 \textrm{      such that  } f(t_1) \approx 0.3
     \end{equation}
 	
 		\section*{Assumptions}
 	
 	\begin{itemize}
-        \item We are on earth and that $g = 9.81 \sfrac{\textrm{m}}{\textrm{s}^2}$
+        \item We are on earth and that $g = 9.81 \textrm{ }\sfrac{\textrm{m}}{\textrm{s}^2}$
 		\item There is negligible drag
 		\item There is negligible flex in the robot arm
         \item We have enough precision in our control of the motors to implement any arbitrary, smooth function that won't crash the arm
@@ -58,9 +60,133 @@ $ must satisfy the following conditions:
 
 	\section*{Solution Methods}
 	
-		Our solution Methods were to first find the position, velocity and acceleration of the egg at the point where we wanted to start the catch. We then used this data as well as the initial conditions of the arm to find a function where the arm would match these data points. We had 5 data points, so we constructed it as a constant snap function (which gave us 5 unknowns to solve for). We then used this resulting function and parameterized it to find $r\left(t\right)$ and $\theta\left(t\right)$. These are the position functions of our actuators of the robotics arm and describe the motion of it.
+		Our solution methods were to first find the position, velocity and acceleration of the egg at the point where we wanted to start the catch. We then used this data as well as the initial conditions of the arm to find a function where the arm would match these data points. We had 5 data points, so we constructed it as a constant snap function (which gave us 5 unknowns to solve for). We then used this resulting function and parameterized it to find $r\left(t\right)$ and $\theta\left(t\right)$. These are the position functions of our actuators of the robotics arm and describe the motion of it.\newline
 
-        If you look at equations 1 through 5, you'll see we essentially have five defined points our function has to go through (given a value for $t_1$). In the wise words of Brook Taylor, "Everything (smooth) is a polynomial if you have enough terms."\footnote{He did not actually say this.}
+        To begin, we want to find a function $f\left(t\right)$ that describes the egg in free fall. This gives us the following:
+
+        \begin{equation}
+            f\left(t\right) = 0.6 - \frac{1}{2} \cdot 9.81 t^2
+        \end{equation}
+        \begin{equation}
+            \dot{f}\left(t\right) = - 9.81 t
+        \end{equation}
+        \begin{equation}
+            \ddot{f}\left(t\right) = - 9.81
+        \end{equation}
+
+        So far, our problem is a little `under-constrained,' so let's explicitly define $t_1$.
+        \begin{equation} 
+            f(t_1) = 0.3 \implies t_1 = \sqrt{\frac{0.6}{9.81}} \approx 0.24731
+        \end{equation}
+
+        Initially, we tried a number of methods to find a function for $y$. We tried assuming a constant snap, and integrating backwards. 
+    \begin{equation*}
+        \dddot{y} = A
+    \end{equation*}
+        We tried using an offset sine wave, since it'll oscillate to a constant velocity and can smoothly change all of its time derivatives of position.
+    \begin{equation*}
+        y = A \cdot \sin{\left(\omega t + \phi\right)} + B
+    \end{equation*}
+        When that didn't work out, we tried dampened sine waves as well.
+    \begin{equation*}
+        y = A \cdot \sin{\left(\omega t + \phi\right)}\cdot e^{-st} + B
+    \end{equation*}
+
+    In the end, we realized that, if you look at equations 1 through 5, you'll see we essentially have five defined points our function has to go through (if you broaden points to include a fixed position at a certain time, a fixed velocity at a certain time, or a fixed acceleration at a certain time). In the wise words of Brook Taylor, "Everything (smooth) is a polynomial if you have enough terms."\footnote{He did not actually say this.} Furthermore, in a rare instance of physicists being practical, Richard Feynman said "I'd rather take the derivative than the integral."\footnote{He didn't say this either. However, he is known for popularizing an integral solving technique often called Feynman's Technique, where you parameterize your integrand with a new variable, take the derivative with respect to that variable, and use the derivative's interchangeability with the integral operator (most of the time) to simplify the expression.}  With this in mind, we looked at a function of the form of a fourth degree polynomial (constant snap/jounce):
+    \begin{equation}
+        y\left(t\right) = At^4 + Bt^3 + Ct^2 + Dt + E
+    \end{equation}
+    \begin{equation}
+        \dot{y}\left(t\right) = A\cdot4t^3 + B\cdot 3t^2 + C \cdot 2t + D + E\cdot 0
+    \end{equation}
+    \begin{equation}
+        \ddot{y}\left(t\right) = A\cdot12t^2 + B\cdot 6t + C \cdot 2 + D\cdot0 + E\cdot 0
+    \end{equation}
+
+    If $y$ is of this form, then we just need to solve for these coefficients, and we'll have an expression for it. Luckily for us, equations 12 through 14 are linear combinations of these coefficients. Plugged into equations 1 to 5, we get the following
+    \begin{equation}
+        \begin{bmatrix}
+            A \cdot 0^4 & B\cdot 0^3 & C\cdot 0^2 & D\cdot 0 & E \\
+            A \cdot 4\cdot 0^3 & B\cdot 3\cdot 0^2 & C \cdot 2\cdot 0 & D & E \cdot 0 \\
+            A \cdot  t_1^4 & B\cdot  t_1^3 & C\cdot  t_1^2 & D\cdot  t_1 & E \\
+            A \cdot  4t_1^3 & B\cdot  3t_1^2 & C \cdot  2t_1 & D & E \cdot  0 \\
+            A\cdot 12t_1^2 & B\cdot  6t_1 & C \cdot  2 & D\cdot 0 & E\cdot  0
+        \end{bmatrix} \textrm{ } = \textrm{ }  
+        \begin{bmatrix}
+            0.4 \\ 
+            0 \\
+            f\left(0.24731\right) \\
+            \dot{f}\left(0.24731\right) \\
+            \ddot{f}\left(0.24731\right) \\
+        \end{bmatrix}
+    \end{equation}
+    \begin{equation}
+        \begin{bmatrix}
+            0^4 & 0^3 & 0^2 & 0 & 1 \\
+            4\cdot 0^3 & 3\cdot 0^2 & 2\cdot 0 & D & 0 \\
+            t_1^4 & t_1^3 & t_1^2 & t_1 & 1 \\
+            4t_1^3 & 3t_1^2 & 2t_1 & 1 & 0 \\
+            12t_1^2 & 6t_1 & 2 & 0 & 0
+        \end{bmatrix} 
+        \begin{bmatrix}
+            A \\
+            B \\ 
+            C \\ 
+            D \\ 
+            E 
+        \end{bmatrix}
+        \textrm{ } = \textrm{ }  
+        \begin{bmatrix}
+            0.4 \\ 
+            0 \\
+            f\left(0.24731\right) \\
+            \dot{f}\left(0.24731\right) \\
+            \ddot{f}\left(0.24731\right) \\
+        \end{bmatrix}
+    \end{equation}
+    \begin{equation}
+        \begin{bmatrix}
+            A \\
+            B \\ 
+            C \\ 
+            D \\ 
+            E 
+        \end{bmatrix} = 
+        {\begin{bmatrix}
+            0 & 0 & 0 & 0 & 1 \\
+            0 &  0 &  0 & 1 & 0 \\
+            t_1^4 & t_1^3 & t_1^2 & t_1 & 1 \\
+            4t_1^3 & 3t_1^2 & 2t_1 & 1 & 0 \\
+            12t_1^2 & 6t_1 & 2 & 0 & 0
+        \end{bmatrix}} ^{-1}
+
+        \begin{bmatrix}
+            0.4 \\ 
+            0 \\
+            0.3 \\
+            -2.43 \\
+            - 9.81 
+        \end{bmatrix}
+    \end{equation}
+    \begin{equation}
+        \begin{bmatrix}
+            A \\
+            B \\ 
+            C \\ 
+            D \\ 
+            E 
+        \end{bmatrix}
+        \textrm{ } = \textrm{ }  
+        \begin{bmatrix}
+            160.3981 \\ 
+            -105.7772 \\ 
+            14.7141 \\ 
+            0 \\ 
+            0.4
+        \end{bmatrix}
+    \end{equation}
+
+
 	 
 	\section*{Solution}
 	
