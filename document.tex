@@ -1,27 +1,27 @@
-\documentclass[nofoot,pdf-a,balance,upint,subscriptcorrection,varvw]{asmeconf}
+\documentclass[nofoot,pdf-a,balance,colorlinks,upint,subscriptcorrection,varvw,mathalfa=cal=boondoxo]{asmeconf}
 \special{papersize=8.5in,11in}
 
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{xfrac}
-\usepackage{tabto}
+\usepackage[margin=1.00in]{geometry}
+% \usepackage{tabto}
 \usepackage{tikz}
 
 
 \begin{document}
 
-    \ConfName{Proceedings of the Dynamics 2024 Very Local Mechanical Engineering Congress and Exposition}
-    \ConfAcronym{ENSC-306-01 Spring 2024}
-    \ConfDate{Spring, 2024}
-    \ConfCity{Spokane, Wa}
-    
-    \title{Robot Arm Project}
-    \SetAuthors{Lucas Johnston\affil{1}\JointFirstAuthor, Brendan Moskalik\affil{1}\JointFirstAuthor}
-	\SetAffiliation{1}{Gonzaga University, Spokane, WA}
-    \date{\today}
+\ConfName{Proceedings of the Dynamics 2024\linebreak Very Local Mechanical Engineering Congress and Exposition}
+\ConfDate{Spring, 2024} % update 
+\ConfCity{Spokane, WA}
 
-    \maketitle
+    \title{Robot Arm Project}
+    \SetAuthors{Lucas Johnston\affil{1}, Brendan Moskalik\affil{1}}
+	\SetAffiliation{1}{Gonzaga University, Spokane, WA}
+
+
+\maketitle
 
     \section*{Problem Description}
 	
@@ -34,24 +34,24 @@ $ must satisfy the following conditions:
     \begin{equation}
         \dot{y}\left(0\right) = 0
     \end{equation}
-	
-		\section*{Assumptions}
-	
-	\begin{itemize}
-        \item We are on earth and that $g = 9.81 \sfrac{\textrm{m}}{\textrm{s}^2}$
-		\item There is negligible drag
-		\item There is negligible flex in the robot arm
-	\end{itemize}
+	% 
+	% 	\section*{Assumptions}
+	% 
+	% \begin{itemize}
+    %     \item We are on earth and that $g = 9.81 \sfrac{\textrm{m}}{\textrm{s}^2}$
+	% 	\item There is negligible drag
+	% 	\item There is negligible flex in the robot arm
+	% \end{itemize}
 
-	\section*{Solution Methods}
-	
-	\section*{Solution}
-	
-	\section*{Solution Validation}
-	
-	\section*{Discussion of Results}
-	
-	Our solution meet all the requirements given by the problem statement. We only broke the motion of $y\left(t\right)$ into two segments for the egg. There is the motion before contact with the robot where it is accelerating down, and after when it starts to slow down. The robot arm itself traveling on this path was made to be one segment only as we extrapolated the motion of slowing down the egg to before contact with it. This solution is a very smooth way to do it, as we ended up dealing with a constant snap function. Because it is fundamentally a constant function over the path it also is a very simple solution to the problem.
-	% needs data of actuators
+	% \section*{Solution Methods}
+	% 
+	% \section*{Solution}
+	% 
+	% \section*{Solution Validation}
+	% 
+	% \section*{Discussion of Results}
+	% 
+	% Our solution meet all the requirements given by the problem statement. We only broke the motion of $y\left(t\right)$ into two segments for the egg. There is the motion before contact with the robot where it is accelerating down, and after when it starts to slow down. The robot arm itself traveling on this path was made to be one segment only as we extrapolated the motion of slowing down the egg to before contact with it. This solution is a very smooth way to do it, as we ended up dealing with a constant snap function. Because it is fundamentally a constant function over the path it also is a very simple solution to the problem.
+	% % needs data of actuators
 	
 \end{document}
