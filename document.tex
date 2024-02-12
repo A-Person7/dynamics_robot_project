@@ -44,14 +44,18 @@ $ must satisfy the following conditions:
 	% \end{itemize}
 
 	% \section*{Solution Methods}
+	
+		Our solution Methods were to first find the poisition, velocity and acceleration of the egg at the point where we wanted to start the catch. We then used this data as well as the initial conditions of the arm to find a function where the arm would match these data points. We had 5 data points, so we constructed it as a constant snap function (which gave us 5 unknowns to solve for). We then used this resulting function and parameterized it to find $r\left(t\right)$ and $\theta\left(t\right)$. These are the position functions of our actuators of the robotics arm and describe the motion of it.
 	% 
 	% \section*{Solution}
+	
 	% 
 	% \section*{Solution Validation}
+	
 	% 
 	% \section*{Discussion of Results}
 	% 
 	% Our solution meet all the requirements given by the problem statement. We only broke the motion of $y\left(t\right)$ into two segments for the egg. There is the motion before contact with the robot where it is accelerating down, and after when it starts to slow down. The robot arm itself traveling on this path was made to be one segment only as we extrapolated the motion of slowing down the egg to before contact with it. This solution is a very smooth way to do it, as we ended up dealing with a constant snap function. Because it is fundamentally a constant function over the path it also is a very simple solution to the problem.
-	% % needs data of actuators
+	% needs data of actuators
 	
 \end{document}
