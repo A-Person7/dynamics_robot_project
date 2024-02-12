@@ -28,7 +28,7 @@
 
     \section*{Problem Description}
 	
-    Given an egg in free fall, we want to determine a smooth path over time that a robotic arm can follow to catch the egg without it breaking. The robotic arm consists of a linear actuator and a motor that rotates the linear actuator such that it's motion can be fully described by $r\left(t\right)$ and $\theta\left(t\right)$, which are the radius as a function of time and the angle as a function of time, respectively. In the name of good faith and best practice, all angles discussed will be in radians. Together with the physical constraints imposed on the system that lock the robotic arm's catcher onto a straight line, these both fully define a function $y\left(t\right)$, which describes the height of the catcher. Helpfully, $y\left(t\right)$ fully describes both $r\left(t\right)$ and $\theta\left(t\right)$, so our primary goal, first and foremost, is to solve for a valid $y\left(t\right)$ function. The arm must start at rest 0.6 meters above the table surface. To smoothly catch the egg, the arm must match the position, velocity, and acceleration of the egg at some instance around 0.5 meters above the table. The egg starts at rest 0.8 meters above the table.\newline \newline 
+    Given an egg in free fall, we want to determine a smooth path over time that a robotic arm can follow to catch the egg without it breaking. The robotic arm consists of a linear actuator and a motor that rotates the linear actuator such that it's motion can be fully described by $r\left(t\right)$ and $\theta\left(t\right)$, which are the radius as a function of time and the angle as a function of time, respectively. In the name of good faith and best practice, all angles discussed will be in radians. Together with the physical constraints imposed on the system that lock the robotic arm's catcher onto a straight line, these both fully define a function $y\left(t\right)$, which describes the height of the catcher. Helpfully, $y\left(t\right)$ fully describes both $r\left(t\right)$ and $\theta\left(t\right)$, so our primary goal, first and foremost, is to solve for a valid $y\left(t\right)$ function. The arm must start at rest 0.6 meters above the table surface. To smoothly catch the egg, the arm must match the position, velocity, and acceleration of the egg at some instance around 0.5 meters above the table. The egg starts at rest 0.8 meters above the table. The catch must be complete with the arm stopped moving at least 0.1 m above the table as well. \newline \newline 
     For our purposes, we will define the origin to be O, the pivot point of the robot arm. Let $f\left(t\right)$ be the function representing the free fall of the egg. Both $y$ and $f$ are defined as the height above this origin point, in meters. This means $y\left(t\right)$ must satisfy the following conditions:
     \begin{equation}
         y\left(0\right) = 0.4
@@ -63,6 +63,7 @@
 		\item There is negligible drag
 		\item There is negligible flex in the robot arm
         \item We have enough precision in our control of the motors to implement any arbitrary, smooth function that won't crash the arm
+		\item The robot knows when the edd drops
 	\end{itemize}
 
 	\section*{Solution Methods}
@@ -86,7 +87,7 @@
              f(t_1) = 0.3 \implies t_1 = \sqrt{\frac{0.6}{9.81}} \approx 0.24731
          \end{equation}
      
-       Initially, we tried a number of methods to find a function for $y$. We tried assuming a constant snap, and integrating backwards, using initial conditions to solve variables. 
+       Initially, we tried a number of methods to find a function for $y$. We tried assuming a constant jerk, and integrating backwards, using initial conditions to solve variables. 
     \begin{equation*}
         \dddot{y} = A
     \end{equation*}
@@ -221,6 +222,27 @@
             \legend{$f\left(t\right)$, $y\left(t\right)$, Final position};
         \end{axis}
     \end{tikzpicture}   
+	
+	The origin of the height displayed is based on the pivot point of the robot arm. We know the pivot point to be 0.2 meters above the table, and since we never go negative in this graph we know:
+	\begin{equation}
+	y_{\textrm{min}} > 0.2
+	\end{equation}
+	So we stop the egg fast enough to clear the table the arm is sitting on, as 0.2 meters is greater than the minimum 0.1 meters given by the problem.
+
+	Now we just need to convert this $y\left(t\right)$ function to polar colrdinate to find where our motor should go to. This can be done with:
+	\begin{equation}
+	r = \sqrt{0.25+y\left(t\right)^2}
+	\end{equation}
+	\begin{equation}
+	\theta = \arctan(\frac{y\left(t\right)}{0.5})
+	\end{equation}
+	We can then add in our function of$y\left(t\right)$ and get the functions for the parameters of the acrtuators. $r$ tells us the length of the linear actuator in the arm, and $\theta$ tells us the angle of the actuator at the base of the arm. 
+	\begin{equation}
+	r = \sqrt{0.25+\left( 160.4 \cdot t^4 - 105.78 \cdot t^3 + 14.71 \cdot t^2 + 0.4\right)^2}
+	\end{equation}
+	\begin{equation}
+	\theta = \arctan(\frac{160.4 \cdot t^4 - 105.78 \cdot t^3 + 14.71 \cdot t^2 + 0.4}{0.5})
+	\end{equation}
 
 	\section*{Discussion of Results}
 
