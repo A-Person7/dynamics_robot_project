@@ -242,7 +242,7 @@
 	\end{equation}
     For $\Theta$, we only care about values between $-\frac{\pi}{2}$ and $\frac{\pi}{2}$.
 	\begin{equation}
-        \theta = \arctan{\left(\frac{y)}{0.5}\right)}
+        \theta = \arctan{\left(\frac{y}{0.5}\right)}
 	\end{equation}
 	\begin{equation}
         \dot{\theta} = \frac{2\dot{y}}{4y^2 + 1}
@@ -250,13 +250,30 @@
 	\begin{equation}
         \ddot{\theta} = \frac{2\ddot{y}\left(4y^2+1\right) - 16y\dot{y}^2}{{\left(4y^2 + 1\right)}^2}
 	\end{equation}
-    We can then add in our function of $y\left(t\right)$ and get the functions for the parameters of the actuators. $r$ tells us the length of the linear actuator in the arm, and $\theta$ tells us the angle of the actuator at the base of the arm (with respect to the horizontal axis). 
+	We can then find the needed derivatives of $y\left(t\right)$
+	\begin{equation}
+	\dot{y}\left(t\right) = 641.6\cdot t^3 - 317.34\cdot t^2 + 29.42\cdot t
+	\end{equation}
+
+	\begin{equation}
+	\ddot{y}\left(t\right) = 1924.8\cdot t^2 - 634.68\cdot t + 29.42
+	\end{equation}
+
+    We can then add in our function of $y\left(t\right)$ and get the functions for the parameters of the actuators. The value of $r$ tells us the length of the linear actuator in the arm, and the value of $\theta$ tells us the angle of the actuator at the base of the arm (with respect to the horizontal axis). 
 	\begin{equation}
 	r = \sqrt{0.25+\left( 160.4 \cdot t^4 - 105.78 \cdot t^3 + 14.71 \cdot t^2 + 0.4\right)^2}
 	\end{equation}
 	\begin{equation}
+	r = \sqrt{25728.16 \cdot t^8 - 33934.224 \cdot t^7 + 15908.3764 \cdot t^6 - 3112.0476 \cdot t^5 + 344.7041 \cdot t^4 - 84.624\cdot t^3 + 11.768 \cdot t^2 + 0.41}
+	\end{equation}
+	\begin{equation}
         \theta = \arctan{\left(\frac{160.4 \cdot t^4 - 105.78 \cdot t^3 + 14.71 \cdot t^2 + 0.4}{0.5}\right)}
 	\end{equation}
+	\begin{equation}
+	\dot{\theta} =\frac{2\cdot\left(641.6\cdot t^3 - 317.34\cdot t^2 + 29.42\cdot t\right)}{4\cdot\left(160.4 \cdot t^4 - 105.78 \cdot t^3 + 14.71 \cdot t^2 + 0.4\right)^2+1}
+	\end{equation}
+
+	%% TODO ADD GRAPHS OF THESE FUNCTIONS
 
 	\section*{Discussion of Results}
 
