@@ -11,24 +11,32 @@
 \usepackage{pgfplots}
 \usepackage[thinc]{esdiff}
 
-\pgfplotsset{compat = newest}
-
+\pgfplotsset{
+    compat = newest,
+    /pgf/declare function= {
+        % y(t)
+        f(\x) = 160.3981*(\x)^4-105.7772*(\x)^3+14.7141*(\x)^2+0.4;
+        % derivative of y(t)
+        g(\x) = 160.3981*4*(\x)^3-105.7772*3*(\x)^2+14.7141*2*(\x);
+        % second derivative of y(t)
+        h(\x) = 160.3981*12*(\x)^2-105.7772*6*(\x)+14.7141*2;
+    },
+}
 
 \begin{document}
-
     \ConfName{Proceedings of the Dynamics 2024\linebreak Very Local Mechanical Engineering Congress and Exposition}
     \ConfDate{Spring, 2024} % update 
     \ConfCity{Spokane, WA}
 
     \title{Robot Arm Project}
-    \SetAuthors{Lucas Johnston\affil{1}\JointFirstAuthor, Brendan Moskalik\affil{1}\JointFirstAuthor}
+    \SetAuthors{Lucas S. Johnston\affil{1}\JointFirstAuthor, Brendan Moskalik\affil{1}\JointFirstAuthor}
 	\SetAffiliation{1}{Gonzaga University, Spokane, WA}
 
     \maketitle
 
     \section*{Problem Description}
 	
-    Given an egg in free fall, we want to determine a smooth path over time that a robotic arm can follow to catch the egg without it breaking. The robotic arm consists of a linear actuator and a motor that rotates the linear actuator such that it's motion can be fully described by $r\left(t\right)$ and $\theta\left(t\right)$, which are the radius as a function of time and the angle as a function of time, respectively. In the name of good faith and best practice, all angles discussed will be in radians. Together with the physical constraints imposed on the system that lock the robotic arm's catcher onto a straight line, these both fully define a function $y\left(t\right)$, which describes the height of the catcher. Helpfully, $y\left(t\right)$ fully describes both $r\left(t\right)$ and $\theta\left(t\right)$, so our primary goal, first and foremost, is to solve for a valid $y\left(t\right)$ function. The arm must start at rest 0.6 meters above the table surface. To smoothly catch the egg, the arm must match the position, velocity, and acceleration of the egg at some instance around 0.5 meters above the table. The egg starts at rest 0.8 meters above the table. The catch must be complete with the arm stopped moving at least 0.1 m above the table as well. \newline \newline 
+    Given an egg in free fall, we want to determine a smooth path over time that a robotic arm can follow to catch the egg without it breaking. The robotic arm consists of a linear actuator and a motor that rotates the linear actuator such that it's motion can be fully described by $r\left(t\right)$ and $\theta\left(t\right)$, which are the radius as a function of time and the angle as a function of time, respectively. In the name of good faith and best practice, all angles discussed will be in radians. Together with the physical constraints imposed on the system that lock the robotic arm's catcher onto a straight line, these both fully define a function $y\left(t\right)$, which describes the height of the catcher from when it starts until it reaches its final position. Helpfully, $y\left(t\right)$ fully describes both $r\left(t\right)$ and $\theta\left(t\right)$, so our primary goal, first and foremost, is to solve for a valid $y\left(t\right)$ function. The arm must start at rest 0.6 meters above the table surface. To smoothly catch the egg, the arm must match the position, velocity, and acceleration of the egg at some instance around 0.5 meters above the table. The egg starts at rest 0.8 meters above the table. The catch must be complete with the arm stopped moving at least 0.1 m above the table as well. \newline \newline 
     For our purposes, we will define the origin to be O, the pivot point of the robot arm. Let $f\left(t\right)$ be the function representing the free fall of the egg. Both $y$ and $f$ are defined as the height above this origin point, in meters. This means $y\left(t\right)$ must satisfy the following conditions:
     \begin{equation}
         y\left(0\right) = 0.4
@@ -200,35 +208,50 @@
 
     Here, each coefficient has implicit units that make it work out to meters when multiplied by its respective time power (e.g. A is in meters per second to the fourth, E is in meters). Even though our above formulation should guarantee that this function goes through every required point, it's worth double checking. Furthermore, we did not include information about the function's end behavior in this derivation, so we need to check if it's time derivative goes to zero so we can stop the arm at its final position, and that this position is above the table.
 
+
+
 	 
 	\section*{Solution}
 	
-    Our solution meet all the requirements given by the problem statement. We only broke the motion of $y\left(t\right)$ into two segments for the egg. There is the motion before contact with the robot where it is accelerating down, and after when it starts to slow down. The robot arm itself traveling on this path was made to be one segment only as we extrapolated the motion of slowing down the egg to before contact with it. This solution is a very smooth way to do it, as we ended up dealing with a constant snap function. Because it is fundamentally a constant function over the path it also is a very simple solution to the problem. After the robot arm caught the egg and $\dot{y} = 0$, we stopped the arm and called that the final position. This can be seen on the figure below.\newline
+    Our solution meet all the requirements given by the problem statement. We only broke the motion of the arm into two segments, the part where it moves to catch the egg and recovers, and the final position we stop it at. There is the motion before contact with the robot where it is accelerating down, and after when it starts to slow down. The robot arm itself traveling on this path was made to be one segment only as we extrapolated the motion of slowing down the egg to before contact with it. This solution is a very smooth way to do it, as we ended up dealing with a constant snap function. Because it is fundamentally a constant function over the path it also is a very simple solution to the problem. After the robot arm caught the egg and $\dot{y} = 0$, we stopped the arm and called that the final position. This can be seen in Fig \ref{fig:1}.\newline
 
-
-    \begin{tikzpicture}
-        \begin{axis}[
-                xmin = 0,
-                xmax = 0.9,
-                ymin = 0,
-                ymax = 0.8,
-                xlabel = time (s),
-                ylabel = height (m),
-                legend pos=north east, 
-                ]
-            \addplot[domain = 0:0.247298674822, thick, dashed, red]{0.6-0.5*9.81*x^2};
-            \addplot[domain = 0:0.37095212, thick]{160.3981*x^4-105.7772*x^3+14.7141*x^2+0.4};
-            \addplot[domain = 0.37095212:0.9, red, thick]{0.0625198478831};
-            \legend{$f\left(t\right)$, $y\left(t\right)$, Final position};
-        \end{axis}
-    \end{tikzpicture}   
+    % The h specifier means to place the figure (approximately) here (default is top of page)
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.9,
+                    ymin = 0,
+                    ymax = 0.8,
+                    xlabel = time (s),
+                    ylabel = height (m),
+                    legend pos=north east, 
+                    ]
+                \addplot[domain = 0:0.247298674822, thick, dashed, red]{0.6-0.5*9.81*x^2};
+                \addplot[domain = 0:0.37095212, thick]{160.3981*x^4-105.7772*x^3+14.7141*x^2+0.4};
+                \addplot[domain = 0.37095212:0.9, red, thick]{0.0625198478831};
+                \legend{$f\left(t\right)$, $y\left(t\right)$, Final position};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{Robot arm height $y$ versus time $t$}\label{fig:1}
+    \end{figure}
 	
+
 	The origin of the height displayed is based on the pivot point of the robot arm. We know the pivot point to be 0.2 meters above the table, and since we never go negative in this graph we know:
 	\begin{equation}
 	y_{\textrm{min}} > 0.2
 	\end{equation}
-	So we stop the egg fast enough to clear the table the arm is sitting on, as 0.2 meters is greater than the minimum 0.1 meters given by the problem.
+	So we stop the egg fast enough to clear the table the arm is sitting on, as 0.2 meters is greater than the minimum 0.1 meters given by the problem. This means we stop the catcher at 0.3710 seconds after it starts moving, and 0.1237 seconds after it catches the egg.\newline
+    Differentiating $y$, we get the following:
+    \begin{equation}
+        \dot{y}\left(t\right) = 641.6 \cdot t^3 - 317.34 \cdot t^2 + 29.42 \cdot t
+    \end{equation}
+    \begin{equation}
+        \ddot{y}\left(t\right) = 1924.8 \cdot t^2 - 634.68 \cdot t + 29.42
+    \end{equation}
 
+
+<<<<<<< HEAD
 
     Differentiating $y$, we get the following:
     \begin{equation}
@@ -240,6 +263,10 @@
 
 
 	Now we just need to convert this $y$ function to polar coordinate to find where our motor should go to. This can be done via the Pythagorean theorem and trigonometry. The value of $r$ tells us the length of the linear actuator in the arm, and the value of $\theta$ tells us the angle of the actuator at the base of the arm (with respect to the horizontal axis). Here, $r$ tells us the length of the linear actuator in the arm, and $\theta$ tells us the angle of the actuator at the base of the arm (with respect to the horizontal axis). 
+=======
+	Now we just need to convert this $y$ function to polar coordinate to find where our motor should go to. This can be done via the Pythagorean theorem and trigonometry.
+
+>>>>>>> 9b83b9c (figures)
     \begin{figure}[h]
         \centering
         % stolen from https://tex.stackexchange.com/questions/590760/how-can-i-draw-a-right-triangle-in-latex
@@ -287,6 +314,110 @@
 	\begin{equation}
 	    \dot{\theta} =\frac{2\cdot\left(641.6\cdot t^3 - 317.34\cdot t^2 + 29.42\cdot t\right)}{4\cdot\left(160.4 \cdot t^4 - 105.78 \cdot t^3 + 14.71 \cdot t^2 + 0.4\right)^2+1}
 	\end{equation}
+
+    We can use this information to plot the radius and angle as a function of time. Combining Equations 22-23 with Equations 13-15 gives us first and second time derivatives as well, which we can also graph to see how they evolve over time. Note that these graphs cut off when the motion of the robotic arm ends, which would keep the values for the radius and angle constant, while all of their derivatives immediately drop to zero.
+
+    %Plugging in equations 13 to 15 into 22 to 24, we get enough information to create a graph of $r$ and $\theta$, as well as their first and second time derivatives. These graphs are
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = radius (meters),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{sqrt(0.25 + f(x)^2)};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{radius $r$ versus time $t$}
+    \end{figure}
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = derivative of radius (meters per second),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{f(x)*g(x)/sqrt(0.25 + f(x)^2)};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{first time derivative of radius $\dot{r}$ versus time $t$}
+    \end{figure}
+
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = second derivative of radius (meters per second per second),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{(f(x)^3*h(x)+0.25*f(x)*h(x)+0.25*(g(x)^2))/((0.25+f(x)^2)^(3/2))};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{second time derivative of radius $\ddot{r}$ versus time $t$}
+    \end{figure}
+
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = angle (radians),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{atan(f(x)/0.5)};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{angle $\theta$ versus time $t$}
+    \end{figure}
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = derivative of angle (radians per second),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{2*g(x)/(4*f(x)^2+1)};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{first time derivative of angle $\dot{\theta}$ versus time $t$}
+    \end{figure}
+
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = second derivative of angle (radians per second per second),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{(2*g(x)*(4*f(x)^2+1)-16*f(x)*g(x)^2)/(4*f(x)^2+1)^2};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{second time derivative of radius $\ddot{\theta}$ versus time $t$}
+    \end{figure}
+
 
     We can use this information to plot the radius and angle as a function of time. Combining Equations 22-23 with Equations 13-15 gives us first and second time derivatives as well, which we can also graph to see how they evolve over time. Note that these graphs cut off when the motion of the robotic arm ends, which would keep the values for the radius and angle constant, while all of their derivatives immediately drop to zero.
 
