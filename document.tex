@@ -229,7 +229,35 @@
 	\end{equation}
 	So we stop the egg fast enough to clear the table the arm is sitting on, as 0.2 meters is greater than the minimum 0.1 meters given by the problem.
 
-	Now we just need to convert this $y$ function to polar coordinate to find where our motor should go to. This can be done via the Pythagorean theorem and trigonometry.
+
+    Differentiating $y$, we get the following:
+    \begin{equation}
+        \dot{y}\left(t\right) = 641.6 \cdot t^3 - 317.34 \cdot t^2 + 29.42 \cdot t
+    \end{equation}
+    \begin{equation}
+        \ddot{y}\left(t\right) = 1924.8 \cdot t^2 - 634.68 \cdot t + 29.42
+    \end{equation}
+
+
+	Now we just need to convert this $y$ function to polar coordinate to find where our motor should go to. This can be done via the Pythagorean theorem and trigonometry. The value of $r$ tells us the length of the linear actuator in the arm, and the value of $\theta$ tells us the angle of the actuator at the base of the arm (with respect to the horizontal axis). Here, $r$ tells us the length of the linear actuator in the arm, and $\theta$ tells us the angle of the actuator at the base of the arm (with respect to the horizontal axis). 
+    \begin{figure}[h]
+        \centering
+        % stolen from https://tex.stackexchange.com/questions/590760/how-can-i-draw-a-right-triangle-in-latex
+        \begin{tikzpicture}
+                \coordinate (a) at (7,0);
+                \coordinate (b) at (10,0);
+                \coordinate (c) at (10,4);
+                \draw (a) -- (b)node[midway, below]{0.5} -- (c)node[midway,right]{$y$} -- (a)node[midway,left, above]{$r$ }; % Triangle.
+       
+                % stolen from https://tex.stackexchange.com/questions/278282/how-to-draw-an-angle-with-tikz#278284
+                \draw [] (a) -- ++(0.7cm,0) arc(0:{atan(4/3)}:0.7cm) node[midway,right] {$\theta$} -- cycle;
+                \draw (a) node[anchor=east,align=center] {O};
+            \end{tikzpicture}
+        \caption{Geometric constraints}
+    \end{figure}
+
+    These relations give us the following:
+
 	\begin{equation}
         r = \sqrt{0.5^2+y^2} = \sqrt{0.25 + y^2}
 	\end{equation}
@@ -237,10 +265,9 @@
         \dot{r} = \frac{1}{2\sqrt{0.25+y^2}}\cdot2y\cdot\dot{y} = \frac{ y\cdot\dot{y}}{\sqrt{0.25+y^2}}
 	\end{equation}
 	\begin{equation}
-        % TODO -- CHECK THIS
         \ddot{r} = \frac{y^3 \ddot{y} + 0.25 y\ddot{y} + 0.25\dot{y}^2}{{\left(0.25 + y^2\right)}^{\sfrac{3}{2}}}
 	\end{equation}
-    For $\Theta$, we only care about values between $-\frac{\pi}{2}$ and $\frac{\pi}{2}$.
+    For $\theta$, we only care about values between $-\frac{\pi}{2}$ and $\frac{\pi}{2}$.
 	\begin{equation}
         \theta = \arctan{\left(\frac{y}{0.5}\right)}
 	\end{equation}
@@ -250,30 +277,120 @@
 	\begin{equation}
         \ddot{\theta} = \frac{2\ddot{y}\left(4y^2+1\right) - 16y\dot{y}^2}{{\left(4y^2 + 1\right)}^2}
 	\end{equation}
-	We can then find the needed derivatives of $y\left(t\right)$
-	\begin{equation}
-	\dot{y}\left(t\right) = 641.6\cdot t^3 - 317.34\cdot t^2 + 29.42\cdot t
-	\end{equation}
-
-	\begin{equation}
-	\ddot{y}\left(t\right) = 1924.8\cdot t^2 - 634.68\cdot t + 29.42
-	\end{equation}
-
-    We can then add in our function of $y\left(t\right)$ and get the functions for the parameters of the actuators. The value of $r$ tells us the length of the linear actuator in the arm, and the value of $\theta$ tells us the angle of the actuator at the base of the arm (with respect to the horizontal axis). 
+    Here, $r$ tells us the length of the linear actuator in the arm, and $\theta$ tells us the angle of the actuator at the base of the arm (with respect to the horizontal axis). We can then add in our function of $y\left(t\right)$ and get the parameters of the actuators as a function of time. 
 	\begin{equation}
 	r = \sqrt{0.25+\left( 160.4 \cdot t^4 - 105.78 \cdot t^3 + 14.71 \cdot t^2 + 0.4\right)^2}
-	\end{equation}
-	\begin{equation}
-	r = \sqrt{25728.16 \cdot t^8 - 33934.224 \cdot t^7 + 15908.3764 \cdot t^6 - 3112.0476 \cdot t^5 + 344.7041 \cdot t^4 - 84.624\cdot t^3 + 11.768 \cdot t^2 + 0.41}
 	\end{equation}
 	\begin{equation}
         \theta = \arctan{\left(\frac{160.4 \cdot t^4 - 105.78 \cdot t^3 + 14.71 \cdot t^2 + 0.4}{0.5}\right)}
 	\end{equation}
 	\begin{equation}
-	\dot{\theta} =\frac{2\cdot\left(641.6\cdot t^3 - 317.34\cdot t^2 + 29.42\cdot t\right)}{4\cdot\left(160.4 \cdot t^4 - 105.78 \cdot t^3 + 14.71 \cdot t^2 + 0.4\right)^2+1}
+	    \dot{\theta} =\frac{2\cdot\left(641.6\cdot t^3 - 317.34\cdot t^2 + 29.42\cdot t\right)}{4\cdot\left(160.4 \cdot t^4 - 105.78 \cdot t^3 + 14.71 \cdot t^2 + 0.4\right)^2+1}
 	\end{equation}
 
-	%% TODO ADD GRAPHS OF THESE FUNCTIONS
+    We can use this information to plot the radius and angle as a function of time. Combining Equations 22-23 with Equations 13-15 gives us first and second time derivatives as well, which we can also graph to see how they evolve over time. Note that these graphs cut off when the motion of the robotic arm ends, which would keep the values for the radius and angle constant, while all of their derivatives immediately drop to zero.
+
+    %Plugging in equations 13 to 15 into 22 to 24, we get enough information to create a graph of $r$ and $\theta$, as well as their first and second time derivatives. These graphs are
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = radius (meters),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{sqrt(0.25 + f(x)^2)};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{radius $r$ versus time $t$}
+    \end{figure}
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = derivative of radius (meters per second),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{f(x)*g(x)/sqrt(0.25 + f(x)^2)};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{first time derivative of radius $\dot{r}$ versus time $t$}
+    \end{figure}
+
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = second derivative of radius (meters per second per second),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{(f(x)^3*h(x)+0.25*f(x)*h(x)+0.25*(g(x)^2))/((0.25+f(x)^2)^(3/2))};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{second time derivative of radius $\ddot{r}$ versus time $t$}
+    \end{figure}
+
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = angle (radians),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{atan(f(x)/0.5)};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{angle $\theta$ versus time $t$}
+    \end{figure}
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = derivative of angle (radians per second),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{2*g(x)/(4*f(x)^2+1)};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{first time derivative of angle $\dot{\theta}$ versus time $t$}
+    \end{figure}
+
+
+    \begin{figure}[h]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = second derivative of angle (radians per second per second),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{(2*g(x)*(4*f(x)^2+1)-16*f(x)*g(x)^2)/(4*f(x)^2+1)^2};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{second time derivative of radius $\ddot{\theta}$ versus time $t$}
+    \end{figure}
+
 
 	\section*{Discussion of Results}
 
