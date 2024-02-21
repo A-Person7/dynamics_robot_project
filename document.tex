@@ -417,7 +417,7 @@
                     legend pos=north east, 
                     samples=100
                     ]
-                \addplot[domain = 0:0.37095212]{(2*g(x)*(4*f(x)^2+1)-16*f(x)*g(x)^2)/(4*f(x)^2+1)^2};
+                \addplot[domain = 0:0.37095212]{(2*h(x)*(4*f(x)^2+1)-16*f(x)*g(x)^2)/(4*f(x)^2+1)^2};
             \end{axis}
         \end{tikzpicture}   
         \caption{second time derivative of angle $\ddot{\theta}$ versus time $t$}\label{figAngular_accel}
@@ -425,12 +425,17 @@
 
 
 	\section*{Discussion of Results}
-% TODO -- update to include new figure
-        We can combine the components of acceleration shown in Fig. \ref{actuatorAccel}) with the mass of the egg to determine the forces our solution would impose on an actual actuator. Assuming the mass of the actuator's sliding component and the egg do not exceed 1 kg (likely a conservative estimate), we can get away with an actuator that can exert 20 Newtons of force. The actuator would need to start exerting this force very quickly, though, as radial acceleration starts around 20 meters per second squared. This means the maximum force of the actuator we select would probably need to be higher, and we'd have to look at the force curves to ensure it is capable of this feat. Of course, this actuator would need to have a compressed length about 0.5 meters or less, and a lengthened length of about 0.7 meters or more to fulfill the movement curve, as can be seen in Fig. \ref{figRadius}.
+
+        We can combine the components of acceleration shown in Fig. \ref{actuatorAccel3D} and \ref{actuatorAccel2D} with the mass of the egg to determine the forces our solution would impose on an actual actuator. Assuming the mass of the actuator's sliding component and the egg do not exceed 1 kg (likely a conservative estimate), we can get away with an actuator that can exert 20 Newtons of force. The actuator would need to start exerting this force very quickly, though, as radial acceleration starts around 20 meters per second squared. This means the maximum force of the actuator we select would probably need to be higher, and we'd have to look at the force curves to ensure it is capable of this feat. Of course, this actuator would need to have a compressed length about 0.5 meters or less, and a lengthened length of about 0.7 meters or more to fulfill the movement curve, as can be seen in Fig. \ref{figRadius}.
 
         Something less optimistic towards actually creating this is the tangential acceleration component. Multiplying the second time derivative of the angle with the radius at that moment in time gives us a sideways acceleration. Assuming the linear actuator is rigid, it will need to resist shear and a bending moment, the maximum magnitude of which we can calculate.
 
         To determine how feasible our rotational profile is, we'd need to know more about how we're rotating our radial actuator. If this is done with another actuator, we'd need to perform calculations to convert these angles into its length. If we used a motor to control it, we'd need to ensure it can output the required torque. Luckily, our initial angular acceleration is about our initial radial acceleration, but isn't at its peak. This means we can likely select a motor/actuator based mostly on its maximum output and just check the torque/force curves to see if it can start at its initial value quickly, as it will have time to ramp up to its maximum value.
+
+        \begin{equation} 
+            \vec{\ddot{r}} = \left(\ddot{r} - r{\dot{\theta}}^2\right)\hat{u}_r + \left(r\ddot{\theta} + 2\dot{r}\dot{\theta}\right)\hat{u}_{\theta}
+        \end{equation}
+
 
 
         \begin{figure}[H]
@@ -454,15 +459,39 @@
                     \addplot3[domain = 0:0.37095212, no marks, surf]
                         (
                             {(f(x)^3*h(x)+0.25*f(x)*h(x)+0.25*(g(x)^2))/((0.25+f(x)^2)^(3/2)) - sqrt(0.25 + f(x)^2) * (2*g(x)/(4*f(x)^2+1))^2},
-                            {sqrt(0.25 + f(x)^2) * (2*g(x)*(4*f(x)^2+1)-16*f(x)*g(x)^2)/(4*f(x)^2+1)^2 + 2 *f(x)*g(x)/sqrt(0.25 + f(x)^2)* 2*g(x)/(4*f(x)^2+1)},
+                            {sqrt(0.25 + f(x)^2) * (2*h(x)*(4*f(x)^2+1)-16*f(x)*g(x)^2)/(4*f(x)^2+1)^2 + 2 *f(x)*g(x)/sqrt(0.25 + f(x)^2)* 2*g(x)/(4*f(x)^2+1)},
                             {x}
                         );
                 \end{axis}
             \end{tikzpicture}
 
-            \caption{Radial and tangential components of acceleration (meters per second squared) over time (seconds)}\label{actuatorAccel}
+            \caption{Radial and tangential components of acceleration (meters per second squared) over time (seconds)}\label{actuatorAccel3D}
         \end{figure}
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                        xlabel = Radial acceleration,
+                        ylabel = Tangential acceleration,
+                        xmajorgrids = true,
+                        ymajorgrids = true,
+                        colormap/autumn,
+                       % samples = 25 % God help whomever compiles this...
+                    ]
+                    % radial accel, tangential accel, time, respectively
+                    %   parameterized by x (time, in seconds)
+                    %   recall, radial accel is \ddot{r} - r(\dot{\theta})^2 
+                    %       tangent accel is r \ddot{\theta} + 2 \dot{r} \dot{\theta}
+                    \addplot[domain = 0:0.37095212, no marks, surf]
+                        (
+                            {(f(x)^3*h(x)+0.25*f(x)*h(x)+0.25*(g(x)^2))/((0.25+f(x)^2)^(3/2)) - sqrt(0.25 + f(x)^2) * (2*g(x)/(4*f(x)^2+1))^2},
+                            {sqrt(0.25 + f(x)^2) * (2*h(x)*(4*f(x)^2+1)-16*f(x)*g(x)^2)/(4*f(x)^2+1)^2 + 2 *(f(x)*g(x)/sqrt(0.25 + f(x)^2))* 2*g(x)/(4*f(x)^2+1)}
+                        );
+                \end{axis}
+            \end{tikzpicture}
 
+            \caption{Radial vs. tangential components of acceleration (meters per second squared))}\label{actuatorAccel2D}
+        \end{figure}
 
 
         If we were to actually implement this, our solution is set up in such a way that it can be quickly calculated with the given points. Therefore, to allow me to easily update the arm project as I go, I'd likely set these points up as constant values at compile\footnote{For higher level micro-controllers it is possible to use Python, an interpreted language. One could also use MATLAB, another interpreted language. On the one hand, MATLAB lends itself well to matrix calculation. On the other hand, it's MATLAB. Compiled languages like C++ and libraries like \href{https://github.com/g-truc/glm}{glm} allow us to use \texttt{constexpr} to perform linear algebra computations during compile time, which avoids unnecessary computations on the micro-controller at run-time.} time, which allows us to easily adjust and fine-tune our solution path if we need to (if we find we need to catch the egg a little earlier, for example).
