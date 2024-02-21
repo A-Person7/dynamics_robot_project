@@ -439,7 +439,7 @@
         To determine how feasible our rotational profile is, we'd need to know more about how we're rotating our radial actuator. If this is done with another actuator, we'd need to perform calculations to convert these angles into its length. If we used a motor to control it, we'd need to ensure it can output the required torque. Luckily, our initial angular acceleration is about our initial radial acceleration, but isn't at its peak. This means we can likely select a motor/actuator based mostly on its maximum output and just check the torque/force curves to see if it can start at its initial value quickly, as it will have time to ramp up to its maximum value.
 
         \begin{equation} 
-            \vec{\ddot{r}} = \left(\ddot{r} - r{\dot{\theta}}^2\right)\hat{u}_r + \left(r\ddot{\theta} + 2\dot{r}\dot{\theta}\right)\hat{u}_{\theta}
+            \ddot{\vec{r}} = \left(\ddot{r} - r{\dot{\theta}}^2\right)\hat{u}_r + \left(r\ddot{\theta} + 2\dot{r}\dot{\theta}\right)\hat{u}_{\theta}
         \end{equation}
 
 
