@@ -448,7 +448,8 @@
                         ylabel = Tangential acceleration,
                         zlabel = Time,
                         view = {60}{30},
-                        colormap/autumn,
+                        colormap/viridis,
+                        grid = both,
                         samples = 25 % God help whomever compiles this...
                     ]
                     % radial accel, tangential accel, time, respectively
@@ -467,30 +468,36 @@
 
             \caption{Radial and tangential components of acceleration (meters per second squared) over time (seconds)}\label{actuatorAccel3D}
         \end{figure}
+
         \begin{figure}[H]
             \centering
             \begin{tikzpicture}
                 \begin{axis}[
+                        zmin = 0,
+                        zmax =  0.37095212,
                         xlabel = Radial acceleration,
                         ylabel = Tangential acceleration,
-                        xmajorgrids = true,
-                        ymajorgrids = true,
-                        colormap/autumn,
-                       % samples = 25 % God help whomever compiles this...
+                        zlabel = Time,
+                        view = {0}{90},
+                        colormap/viridis,
+                        grid = both,
+                        samples = 25 % God help whomever compiles this...
                     ]
                     % radial accel, tangential accel, time, respectively
                     %   parameterized by x (time, in seconds)
                     %   recall, radial accel is \ddot{r} - r(\dot{\theta})^2 
                     %       tangent accel is r \ddot{\theta} + 2 \dot{r} \dot{\theta}
-                    \addplot[domain = 0:0.37095212, no marks, surf]
+                    % ({x expression},{y expression}, {z expression})
+                    \addplot3[domain = 0:0.37095212, no marks, surf]
                         (
                             {(f(x)^3*h(x)+0.25*f(x)*h(x)+0.25*(g(x)^2))/((0.25+f(x)^2)^(3/2)) - sqrt(0.25 + f(x)^2) * (2*g(x)/(4*f(x)^2+1))^2},
-                            {sqrt(0.25 + f(x)^2) * (2*h(x)*(4*f(x)^2+1)-16*f(x)*g(x)^2)/(4*f(x)^2+1)^2 + 2 *(f(x)*g(x)/sqrt(0.25 + f(x)^2))* 2*g(x)/(4*f(x)^2+1)}
+                            {sqrt(0.25 + f(x)^2) * (2*h(x)*(4*f(x)^2+1)-16*f(x)*g(x)^2)/(4*f(x)^2+1)^2 + 2 *f(x)*g(x)/sqrt(0.25 + f(x)^2)* 2*g(x)/(4*f(x)^2+1)},
+                            {x}
                         );
                 \end{axis}
             \end{tikzpicture}
 
-            \caption{Radial vs. tangential components of acceleration (meters per second squared))}\label{actuatorAccel2D}
+            \caption{Radial and tangential components of acceleration (meters per second squared)}\label{actuatorAccel2D}
         \end{figure}
 
 
