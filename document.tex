@@ -100,7 +100,7 @@
 
         To begin, we want to find a function $f\left(t\right)$ that describes the egg in free fall. This gives us the following:
 
-        \begin{equation}
+        \begin{equation}\label{f_t}
             f\left(t\right) = 0.6 - \frac{1}{2} \cdot 9.81 t^2
         \end{equation}
         \begin{equation}
@@ -110,7 +110,13 @@
             \ddot{f}\left(t\right) = - 9.81
         \end{equation}
 
-         So far, our problem is a little `under-constrained,' so let's explicitly define $t_1$.
+         So far, our problem is a little `under-constrained,' so let's explicitly define $t_1$. We decided that it will catch the egg at exatly
+	\begin{equation}
+	f\left(t_1\right) = 0.3. 
+	\end{equation}
+
+	This allows us to use \eqref{f_t} to tolve for $t_1$
+
          \begin{equation} 
              f(t_1) = 0.3 \implies t_1 = \sqrt{\frac{0.6}{9.81}} \approx 0.24731
          \end{equation}
@@ -322,7 +328,7 @@
 	    \dot{\theta} =\frac{2\cdot\left(641.6\cdot t^3 - 317.34\cdot t^2 + 29.42\cdot t\right)}{4\cdot\left(160.4 \cdot t^4 - 105.78 \cdot t^3 + 14.71 \cdot t^2 + 0.4\right)^2+1}
 	\end{equation}
 
-    We can use this information to plot the radius and angle as a function of time. Combining Eq. \eqref{height}, \eqref{y_velocity}, and \eqref{y_acceleration} with Eq. \eqref{r_y_1} to \eqref{angularAccelEq} gives us first and second time derivatives as well, which we can also graph to see how they evolve over time. Note that these graphs cut off when the motion of the robotic arm ends, which would keep the values for the radius and angle constant, while all of their derivatives immediately drop to zero.
+    These functions ar getting pretty messy. The other derivatives of $r$ and $\theta$ can be assembled soley from the equations showen previously. Instead however lets analyze this through plots. We can use this information to plot the radius and angle as a function of time. Combining Eq. \eqref{height}, \eqref{y_velocity}, and \eqref{y_acceleration} with Eq. \eqref{r_y_1} to \eqref{angularAccelEq} gives us first and second time derivatives as well, which we can also graph to see how they evolve over time. Note that these graphs cut off when our motion profile of the robotic arm ends, which would keep the values for the radius and angle constant and bring the egg to a stop. This means all of the respective derivatives immediately drop to zero.
 
     \begin{figure}[H]
         \begin{tikzpicture}
@@ -428,7 +434,7 @@
 
         We can combine the components of acceleration shown in Fig. \ref{actuatorAccel3D} and \ref{actuatorAccel2D} with the mass of the egg to determine the forces our solution would impose on an actual actuator. Assuming the mass of the actuator's sliding component and the egg do not exceed 1 kg (likely a conservative estimate), we can get away with an actuator that can exert 20 Newtons of force. The actuator would need to start exerting this force very quickly, though, as radial acceleration starts around 20 meters per second squared. This means the maximum force of the actuator we select would probably need to be higher, and we'd have to look at the force curves to ensure it is capable of this feat. Of course, this actuator would need to have a compressed length about 0.5 meters or less, and a lengthened length of about 0.7 meters or more to fulfill the movement curve, as can be seen in Fig. \ref{figRadius}.
 
-        Something less optimistic towards actually creating this is the tangential acceleration component. Multiplying the second time derivative of the angle with the radius at that moment in time gives us a sideways acceleration. Assuming the linear actuator is rigid, it will need to resist shear and a bending moment, the maximum magnitude of which we can calculate.
+        The part that mak this less optimistic to actually create this is the tangential acceleration component. Multiplying the second time derivative of the angle with the radius at that moment in time gives us a sideways acceleration. Assuming the linear actuator is rigid, it will need to resist shear and a bending moment, the maximum magnitude of which we can calculate.
 
         To determine how feasible our rotational profile is, we'd need to know more about how we're rotating our radial actuator. If this is done with another actuator, we'd need to perform calculations to convert these angles into its length. If we used a motor to control it, we'd need to ensure it can output the required torque. Luckily, our initial angular acceleration is about our initial radial acceleration, but isn't at its peak. This means we can likely select a motor/actuator based mostly on its maximum output and just check the torque/force curves to see if it can start at its initial value quickly, as it will have time to ramp up to its maximum value.
 
