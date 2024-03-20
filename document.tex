@@ -18,6 +18,7 @@
 \usepackage{pgfplots}
 \usepackage[thinc]{esdiff}
 \usepackage{float}
+\usepackage{graphicx}
 
 \pgfplotsset{
     compat = newest,
@@ -54,9 +55,21 @@
 
     \maketitle
 
+   \section*{Abstract}
+	We have a robot arm to control. An egg is dropped and we want to catch the egg without any impact to the egg. This would keep the egg from getting damaged in any way. In order to control the arm we need to know where the arm should be at every instance in time as well as its acceleration and velocity The goal is to find these three as function of time.
+
     \section*{Problem Description}
 	
-    Given an egg in free fall, we want to determine a smooth path over time that a robotic arm can follow to catch the egg without it breaking. The robotic arm consists of a linear actuator and a motor that rotates the linear actuator such that it's motion can be fully described by $r\left(t\right)$ and $\theta\left(t\right)$, which are the radius as a function of time and the angle as a function of time, respectively. In the name of good faith and best practice, all angles discussed will be in radians. Together with the physical constraints imposed on the system that lock the robotic arm's catcher onto a straight line, these both fully define a function $y\left(t\right)$, which describes the height of the catcher from when it starts until it reaches its final position. Helpfully, $y\left(t\right)$ fully describes both $r\left(t\right)$ and $\theta\left(t\right)$, so our primary goal, first and foremost, is to solve for a valid $y\left(t\right)$ function. The arm must start at rest 0.6 meters above the table surface. To smoothly catch the egg, the arm must match the position, velocity, and acceleration of the egg at some instance around 0.5 meters above the table. The egg starts at rest 0.8 meters above the table. The catch must be complete with the arm stopped moving at least 0.1 m above the table as well. \newline \newline 
+    Given an egg in free fall, we want to determine a smooth path over time that a robotic arm can follow to catch the egg without it breaking. The robotic arm consists of a linear actuator and a motor that rotates the linear actuator such that it's motion can be fully described by $r\left(t\right)$ and $\theta\left(t\right)$, which are the radius as a function of time and the angle as a function of time, respectively. In the name of good faith and best practice, all angles discussed will be in radians. Together with the physical constraints imposed on the system that lock the robotic arm's catcher onto a straight line, these both fully define a function $y\left(t\right)$, which describes the height of the catcher from when it starts until it reaches its final position. Helpfully, $y\left(t\right)$ fully describes both $r\left(t\right)$ and $\theta\left(t\right)$, so our primary goal, first and foremost, is to solve for a valid $y\left(t\right)$ function. The arm must start at rest 0.6 meters above the table surface. To smoothly catch the egg, the arm must match the position, velocity, and acceleration of the egg at some instance around 0.5 meters above the table. The egg starts at rest 0.8 meters above the table. The catch must be complete with the arm stopped moving at least 0.1 m above the table as well. In our cordinate system this is above 0.1 meters below the origin. \newline
+
+\begin{figure}[H]
+	\includegraphics[scale=0.75]{robotArm.png}
+	\caption{Given initial conditions (Units in m)\footnotemark}}
+\end{figure}
+
+\footnotetext{Fitz, Timothy, Robot Arm Project}
+
+ \newline 
     For our purposes, we will define the origin to be O, the pivot point of the robot arm. Let $f\left(t\right)$ be the function representing the free fall of the egg. Both $y$ and $f$ are defined as the height above this origin point, in meters. This means $y\left(t\right)$ must satisfy the following conditions:
     \begin{equation}\label{condition_1}
         y\left(0\right) = 0.4
@@ -74,7 +87,7 @@
         \ddot{y}\left(t_1\right) = \ddot{f}\left(t_1\right)
     \end{equation}
     \begin{equation}\label{condition_6}
-        {y}\left(t\right) > 0.1 \textrm{    } \forall t > 0
+        {y}\left(t\right) > -0.1 \textrm{    } \forall t > 0
     \end{equation}
     \begin{equation}\label{condition_7}
         \exists \textrm{ }t > t_1 \textrm{      such that  }\dot{y}\left(t\right) = 0 
@@ -239,7 +252,7 @@
 	 
 	\section*{Solution}
 	
-    Our solution meet all the requirements given by the problem statement. We only broke the motion of the arm into two segments, the part where it moves to catch the egg and recovers, and the final position we stop it at. There is the motion before contact with the robot where it is accelerating down, and after when it starts to slow down. The robot arm itself traveling on this path was made to be one segment only as we extrapolated the motion of slowing down the egg to before contact with it. This solution is a very smooth way to do it, as we ended up dealing with a constant snap function. Because it is fundamentally a constant function over the path it also is a very simple solution to the problem. After the robot arm caught the egg and $\dot{y} = 0$, we stopped the arm and called that the final position. This can be seen in Fig \ref{fig1}.\newline
+    Our solution meet all the requirements given by the problem statement. We only broke the motion of the arm into two segments, the part where it moves to catch the egg and recovers, and the final position we stop it at. There is the motion before contact with the robot where it is accelerating down, and after when it starts to slow down. The robot arm itself traveling on this path was made to be one segment only as we extrapolated the motion of slowing down the egg to before contact with it. This solution is a very smooth way to do it, as we ended up dealing with a constant snap function. Because it is fundamentally a constant function over the path it also is a very simple solution to the problem. After the robot arm caught the egg and $\dot{y} = 0$, we stopped the arm and called that the final position. This can be seen in Fig \ref{fig1}. In this graph $f\left(t\right)$ is the path of the egg before contact and $y\left(t\right)$ is the position of the arm. When the function for $f\left(t\right)$ stops being visable the egg has been caught and they now move togeather for the rest of the time until they stop. \newline
 
     % The H specifier means to place the figure here  (default is top of page)
     %   can use h for approximately here, H specifically requires the float package
@@ -257,14 +270,13 @@
                 \addplot[domain = 0:0.247298674822, thick, dashed, red]{0.6-0.5*9.81*x^2};
                 \addplot[domain = 0:0.37095212, thick]{160.3981*x^4-105.7772*x^3+14.7141*x^2+0.4};
                 \addplot[domain = 0.37095212:0.9, red, thick]{0.0625198478831};
-                \legend{$f\left(t\right)$, $y\left(t\right)$, Final position};
+                \legend{just egg - $f\left(t\right)$, arm - $y\left(t\right)$, Final position};
             \end{axis}
         \end{tikzpicture}   
-        \caption{Robot arm height $y$ versus time $t$}\label{fig1}
+        \caption{Robot arm and egg height $y$ versus time $t$}\label{fig1}
     \end{figure}
-	
 
-	The origin of the height displayed is based on the pivot point of the robot arm. We know the pivot point to be 0.2 meters above the table, and since we never go negative in this graph we know:
+	The origin of the height displayed is based on the pivot point of the robot arm, in order to keep it consitsnt with the cordinate system we chose initially. We know the pivot point to be 0.2 meters above the table, and since we never go negative in this graph we know that relative to the table:
 	\begin{equation}
 	y_{\textrm{min}} > 0.2
 	\end{equation}
@@ -434,7 +446,7 @@
 
         We can combine the components of acceleration shown in Fig. \ref{actuatorAccel3D} and \ref{actuatorAccel2D} with the mass of the egg to determine the forces our solution would impose on an actual actuator. Assuming the mass of the actuator's sliding component and the egg do not exceed 1 kg (likely a conservative estimate), we can get away with an actuator that can exert 20 Newtons of force. The actuator would need to start exerting this force very quickly, though, as radial acceleration starts around 20 meters per second squared. This means the maximum force of the actuator we select would probably need to be higher, and we'd have to look at the force curves to ensure it is capable of this feat. Of course, this actuator would need to have a compressed length about 0.5 meters or less, and a lengthened length of about 0.7 meters or more to fulfill the movement curve, as can be seen in Fig. \ref{figRadius}.
 
-        The part that mak this less optimistic to actually create this is the tangential acceleration component. Multiplying the second time derivative of the angle with the radius at that moment in time gives us a sideways acceleration. Assuming the linear actuator is rigid, it will need to resist shear and a bending moment, the maximum magnitude of which we can calculate.
+        The part that makes us less optimistic about actually creating this is the tangential acceleration component. Multiplying the second time derivative of the angle with the radius at that moment in time gives us a sideways acceleration. Assuming the linear actuator is rigid, it will need to resist shear and a bending moment, the maximum magnitude of which we can calculate.
 
         To determine how feasible our rotational profile is, we'd need to know more about how we're rotating our radial actuator. If this is done with another actuator, we'd need to perform calculations to convert these angles into its length. If we used a motor to control it, we'd need to ensure it can output the required torque. Luckily, our initial angular acceleration is about our initial radial acceleration, but isn't at its peak. This means we can likely select a motor/actuator based mostly on its maximum output and just check the torque/force curves to see if it can start at its initial value quickly, as it will have time to ramp up to its maximum value.
 
@@ -507,7 +519,7 @@
         \end{figure}
 
 
-        If we were to actually implement this, our solution is set up in such a way that it can be quickly calculated with the given points. Therefore, to allow me to easily update the arm project as I go, I'd likely set these points up as constant values at compile\footnote{For higher level micro-controllers it is possible to use Python, an interpreted language. One could also use MATLAB, another interpreted language. On the one hand, MATLAB lends itself well to matrix calculation. On the other hand, it's MATLAB. Compiled languages like C++ and libraries like \href{https://github.com/g-truc/glm}{glm} allow us to use \texttt{constexpr} to perform linear algebra computations during compile time, which avoids unnecessary computations on the micro-controller at run-time.} time, which allows us to easily adjust and fine-tune our solution path if we need to (if we find we need to catch the egg a little earlier, for example).
+        If we were to actually implement this, our solution is set up in such a way that it can be quickly calculated with the given points. Therefore, to allow me to easily update the arm project as it goes, we would likely set these points up as constant values at compile\footnote{For higher level micro-controllers it is possible to use Python, an interpreted language. One could also use MATLAB, another interpreted language. On the one hand, MATLAB lends itself well to matrix calculation. On the other hand, it's MATLAB. Compiled languages like C++ and libraries like \href{https://github.com/g-truc/glm}{glm} allow us to use \texttt{constexpr} to perform linear algebra computations during compile time, which avoids unnecessary computations on the micro-controller at run-time.} time, which allows us to easily adjust and fine-tune our solution path if we need to (if we find we need to catch the egg a little earlier, for example).
 
 	% needs data of actuators
 	
