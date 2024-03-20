@@ -359,39 +359,6 @@
         \caption{radius $r$ versus time $t$}\label{figRadius}
     \end{figure}
 
-    \begin{figure}[H]
-        \begin{tikzpicture}
-            \begin{axis}[
-                    xmin = 0,
-                    xmax = 0.37095212,
-                    xlabel = time (s),
-                    ylabel = derivative of radius ($\sfrac{\textrm{m}}{\textrm{s}}$),
-                    legend pos=north east, 
-                    samples=100
-                    ]
-                \addplot[domain = 0:0.37095212]{f(x)*g(x)/sqrt(0.25 + f(x)^2)};
-            \end{axis}
-        \end{tikzpicture}   
-        \caption{first time derivative of radius $\dot{r}$ versus time $t$}
-    \end{figure}
-
-
-    \begin{figure}[H]
-        \begin{tikzpicture}
-            \begin{axis}[
-                    xmin = 0,
-                    xmax = 0.37095212,
-                    xlabel = time (s),
-                    ylabel = second derivative of radius ($\sfrac{\textrm{m}}{\textrm{s}^2}$),
-                    legend pos=north east, 
-                    samples=100
-                    ]
-                \addplot[domain = 0:0.37095212]{(f(x)^3*h(x)+0.25*f(x)*h(x)+0.25*(g(x)^2))/((0.25+f(x)^2)^(3/2))};
-            \end{axis}
-        \end{tikzpicture}   
-        \caption{second time derivative of radius $\ddot{r}$ versus time $t$}\label{figRadial_accel}
-    \end{figure}
-
 
     \begin{figure}[H]
         \begin{tikzpicture}
@@ -409,38 +376,8 @@
         \caption{angle $\theta$ versus time $t$}
     \end{figure}
 
-    \begin{figure}[H]
-        \begin{tikzpicture}
-            \begin{axis}[
-                    xmin = 0,
-                    xmax = 0.37095212,
-                    xlabel = time (s),
-                    ylabel = derivative of angle ($\sfrac{\textrm{rad}}{\textrm{s}}$),
-                    legend pos=north east, 
-                    samples=100
-                    ]
-                \addplot[domain = 0:0.37095212]{2*g(x)/(4*f(x)^2+1)};
-            \end{axis}
-        \end{tikzpicture}   
-        \caption{first time derivative of angle $\dot{\theta}$ versus time $t$}
-    \end{figure}
 
-
-    \begin{figure}[H]
-        \begin{tikzpicture}
-            \begin{axis}[
-                    xmin = 0,
-                    xmax = 0.37095212,
-                    xlabel = time (s),
-                    ylabel = second derivative of angle ($\sfrac{\textrm{rad}}{\textrm{s}^2}$),
-                    legend pos=north east, 
-                    samples=100
-                    ]
-                \addplot[domain = 0:0.37095212]{(2*h(x)*(4*f(x)^2+1)-16*f(x)*g(x)^2)/(4*f(x)^2+1)^2};
-            \end{axis}
-        \end{tikzpicture}   
-        \caption{second time derivative of angle $\ddot{\theta}$ versus time $t$}\label{figAngular_accel}
-    \end{figure}
+    The first and second time derivatives of $r$ and $\theta$ can be found in Appendix~\ref{appendixDerivatives}.
 
 
 	\section*{Discussion of Results}
@@ -528,7 +465,76 @@
 
     \appendix
 
+    \section{First and second time derivatives of $r$ and $\theta$}\label{appendixDerivatives}
+
+    \begin{figure}[H]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = derivative of radius ($\sfrac{\textrm{m}}{\textrm{s}}$),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{f(x)*g(x)/sqrt(0.25 + f(x)^2)};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{first time derivative of radius $\dot{r}$ versus time $t$}
+    \end{figure}
+
+
+    \begin{figure}[H]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = second derivative of radius ($\sfrac{\textrm{m}}{\textrm{s}^2}$),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{(f(x)^3*h(x)+0.25*f(x)*h(x)+0.25*(g(x)^2))/((0.25+f(x)^2)^(3/2))};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{second time derivative of radius $\ddot{r}$ versus time $t$}\label{figRadial_accel}
+    \end{figure}
+
+    \begin{figure}[H]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = derivative of angle ($\sfrac{\textrm{rad}}{\textrm{s}}$),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{2*g(x)/(4*f(x)^2+1)};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{first time derivative of angle $\dot{\theta}$ versus time $t$}
+    \end{figure}
+
+
+    \begin{figure}[H]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    xmin = 0,
+                    xmax = 0.37095212,
+                    xlabel = time (s),
+                    ylabel = second derivative of angle ($\sfrac{\textrm{rad}}{\textrm{s}^2}$),
+                    legend pos=north east, 
+                    samples=100
+                    ]
+                \addplot[domain = 0:0.37095212]{(2*h(x)*(4*f(x)^2+1)-16*f(x)*g(x)^2)/(4*f(x)^2+1)^2};
+            \end{axis}
+        \end{tikzpicture}   
+        \caption{second time derivative of angle $\ddot{\theta}$ versus time $t$}\label{figAngular_accel}
+    \end{figure}
+
+
     \section{Code}
-    Code for this document can be found at \href{https://github.com/A-Person7/dynamics_robot_project}{https://github.com/A-Person7/dynamics_robot_project}, and is written in \LaTeX with the help of \textttt{pgfplots}.
+    Code for this document can be found at \href{https://github.com/A-Person7/dynamics_robot_project}{https://github.com/A-Person7/dynamics_robot_project}, and is written in \LaTeX with the help of \texttt{pgfplots}.
 
 \end{document}
