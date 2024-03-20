@@ -1,0 +1,16 @@
+Dynamics Robot Arm Project
+
+
+This project was written in LaTeX. To compile this project, clone this repo, then run latexmk (LaTeX make) on document.tex.
+
+Run the following commands in your shell (requires git and texlive-binextra or another latexmk provider to be installed)
+$ git clone https://github.com/A-Person7/dynamics_robot_project
+$ latexmk document.tex
+
+This will generate document.pdf.
+
+Note that compilation may take a while due to expensive graph computations. Any warnings generated may be supressed by repeatedly hitting enter. It may be necessary to compile this document twice to ensure that equation and figure links are generated properly.
+
+document.tex is the main file for this project, and contains the LaTeX code to create the *.pdf submitted. robotArm.png is an image used for a figure, testing.tex is a document used to test out figure design, and asmeconf.* are formatting files for creating the ASME conference format. They can be found at ctan.org/pkg/asmeconf.
+
+Our code/document is made available under the MIT no attribution license.

@@ -30,6 +30,7 @@
         % second derivative of y(t)
         h(\x) = 160.3981*12*(\x)^2-105.7772*6*(\x)+14.7141*2;
     },
+    grid = both,
 }
 
 % for the autumn color library
@@ -147,7 +148,7 @@
         y = A \cdot \sin{\left(\omega t + \phi\right)}\cdot e^{-st} + B
     \end{equation*}
 
-    In the end, we realized that, if you look at Eq. \eqref{condition_1} through \eqref{condition_5}, you'll see we essentially have five defined points our function has to go through (if you broaden points to include a fixed position at a certain time, a fixed velocity at a certain time, or a fixed acceleration at a certain time). In the wise words of Brook Taylor, ``Everything [smooth] is a polynomial if you have enough terms.''\footnote{He did not actually say this.} Furthermore, in a rare instance of physicists being practical, Richard Feynman said ``I'd rather take the derivative than the integral.''\footnote{He also didn't say this. However, he is known for popularizing an integral solving technique often called Feynman's Technique, where you parameterize your integrand with a new variable, take the derivative with respect to that variable, and use the derivative's interchangeability with the integral operator (most of the time) to simplify the expression.}  With this in mind, we looked at a function of the form of a fourth degree polynomial (constant snap/jounce):
+    In the end, we realized that, if you look at Eq. \eqref{condition_1} through \eqref{condition_5}, you'll see we essentially have five defined points our function has to go through (if you broaden points to include a fixed position at a certain time, a fixed velocity at a certain time, or a fixed acceleration at a certain time). Taking a cue from Taylor series, we can think that everything smooth is a polynomial if you have enough terms. Polynomials are trivial to differentiate as well, which is very convenient.  With this in mind, we looked at a function of the form of a fourth degree polynomial (constant snap/jounce):
     \begin{equation}\label{form_1}
         y\left(t\right) = At^4 + Bt^3 + Ct^2 + Dt + E
     \end{equation}
@@ -158,11 +159,11 @@
         \ddot{y}\left(t\right) = A\cdot12t^2 + B\cdot 6t + C \cdot 2 + D\cdot0 + E\cdot 0
     \end{equation}
 
-    If $y$ is of this form, then we just need to solve for these coefficients, and we'll have an expression for it. Luckily for us, Eq. \eqref{form_1} through \eqref{form_3} are linear combinations of these coefficients. Just like we can expand $\vec{F} = m \vec{a}$ into separate equations for each of its components, we can compact and create a vector of these coefficients. Substituting this form into Eq. \eqref{condition_1} through \eqref{condition_5}, we get the following:
+    If $y$ is of this form, then we just need to solve for these coefficients, and we'll have an expression for it. Luckily for us, Eq. \eqref{form_1} through \eqref{form_3} are linear combinations of these coefficients. Just like we can expand $\vec{F} = m \vec{a}$ into separate equations for each of its components, we can compact and create a vector of these coefficients. Substituting this form into Eq. \eqref{condition_1} through \eqref{condition_5}, we get the following system of equations. Here, we solve this linear systems of equations through linear algebra as it's capable of solving our `value vector' in one fell swoop, but this could be solved element-by-element.
     \begin{equation}
         \begin{bmatrix}
             A \cdot 0 + B\cdot 0 + C\cdot 0 + D\cdot 0 + E \\
-            A \cdot 0 + B\cdot 0 + C  0 + D + E \cdot 0 \\
+            A \cdot 0 + B\cdot 0 + C \cdot 0 + D + E \cdot 0 \\
             A \cdot  t_1^4 + B\cdot  t_1^3 + C\cdot  t_1^2 + D\cdot  t_1 + E \\
             A \cdot  4t_1^3 + B\cdot  3t_1^2 + C \cdot  2t_1 + D + E \cdot  0 \\
             A\cdot 12t_1^2 + B\cdot  6t_1 + C \cdot  2 + D\cdot 0 + E\cdot  0
@@ -270,15 +271,15 @@
                 \addplot[domain = 0:0.247298674822, thick, dashed, red]{0.6-0.5*9.81*x^2};
                 \addplot[domain = 0:0.37095212, thick]{160.3981*x^4-105.7772*x^3+14.7141*x^2+0.4};
                 \addplot[domain = 0.37095212:0.9, red, thick]{0.0625198478831};
-                \legend{just egg - $f\left(t\right)$, arm - $y\left(t\right)$, Final position};
+                \legend{Egg — $f\left(t\right)$, Arm — $y\left(t\right)$, Final position};
             \end{axis}
         \end{tikzpicture}   
         \caption{Robot arm and egg height $y$ versus time $t$}\label{fig1}
     \end{figure}
 
-	The origin of the height displayed is based on the pivot point of the robot arm, in order to keep it consitsnt with the cordinate system we chose initially. We know the pivot point to be 0.2 meters above the table, and since we never go negative in this graph we know that relative to the table:
+	The origin of the height displayed is based on the pivot point of the robot arm, in order to keep it consitsnt with the cordinate system we chose initially. We know the pivot point to be 0.2 meters above the table, and since we never go negative in this graph we know that we meet the condition of stopping movement before 0.1 meters above the table.
 	\begin{equation}
-	y_{\textrm{min}} > 0.2
+	y_{\textrm{min}} > -0.1
 	\end{equation}
 	So we stop the egg fast enough to clear the table the arm is sitting on, as 0.2 meters is greater than the minimum 0.1 meters given by the problem. This means we stop the catcher at 0.3710 seconds after it starts moving, and 0.1237 seconds after it catches the egg.\newline
     Differentiating $y$, we get the following:
@@ -348,7 +349,7 @@
                     xmin = 0,
                     xmax = 0.37095212,
                     xlabel = time (s),
-                    ylabel = radius (meters),
+                    ylabel = radius (m),
                     legend pos=north east, 
                     samples=100
                     ]
@@ -364,7 +365,7 @@
                     xmin = 0,
                     xmax = 0.37095212,
                     xlabel = time (s),
-                    ylabel = derivative of radius (meters per second),
+                    ylabel = derivative of radius ($\sfrac{\textrm{m}}{\textrm{s}}$),
                     legend pos=north east, 
                     samples=100
                     ]
@@ -381,7 +382,7 @@
                     xmin = 0,
                     xmax = 0.37095212,
                     xlabel = time (s),
-                    ylabel = second derivative of radius (meters per second per second),
+                    ylabel = second derivative of radius ($\sfrac{\textrm{m}}{\textrm{s}^2}$),
                     legend pos=north east, 
                     samples=100
                     ]
@@ -398,7 +399,7 @@
                     xmin = 0,
                     xmax = 0.37095212,
                     xlabel = time (s),
-                    ylabel = angle (radians),
+                    ylabel = angle (rad),
                     legend pos=north east, 
                     samples=100
                     ]
@@ -414,7 +415,7 @@
                     xmin = 0,
                     xmax = 0.37095212,
                     xlabel = time (s),
-                    ylabel = derivative of angle (radians per second),
+                    ylabel = derivative of angle ($\sfrac{\textrm{rad}}{\textrm{s}}$),
                     legend pos=north east, 
                     samples=100
                     ]
@@ -431,7 +432,7 @@
                     xmin = 0,
                     xmax = 0.37095212,
                     xlabel = time (s),
-                    ylabel = second derivative of angle (radians per second per second),
+                    ylabel = second derivative of angle ($\sfrac{\textrm{rad}}{\textrm{s}^2}$),
                     legend pos=north east, 
                     samples=100
                     ]
@@ -462,9 +463,9 @@
                 \begin{axis}[
                         zmin = 0,
                         zmax =  0.37095212,
-                        xlabel = Radial acceleration,
-                        ylabel = Tangential acceleration,
-                        zlabel = Time,
+                        xlabel = Radial acceleration ($\sfrac{\textrm{m}}{\textrm{s}^2}$),
+                        ylabel = Tangential acceleration ($\sfrac{\textrm{m}}{\textrm{s}^2}$),
+                        zlabel = Time (s),
                         view = {60}{30},
                         colormap/viridis,
                         grid = both,
@@ -484,18 +485,20 @@
                 \end{axis}
             \end{tikzpicture}
 
-            \caption{Radial and tangential components of acceleration (meters per second squared) over time (seconds)}\label{actuatorAccel3D}
+            \caption{Radial and tangential components of acceleration over time}\label{actuatorAccel3D}
         \end{figure}
 
+        % copied from the above figure with a different viewing angle to preserve 
+        %   coloration
         \begin{figure}[H]
             \centering
             \begin{tikzpicture}
                 \begin{axis}[
                         zmin = 0,
                         zmax =  0.37095212,
-                        xlabel = Radial acceleration,
-                        ylabel = Tangential acceleration,
-                        zlabel = Time,
+                        xlabel = Radial acceleration ($\sfrac{\textrm{m}}{\textrm{s}^2}$),
+                        ylabel = Tangential acceleration ($\sfrac{\textrm{m}}{\textrm{s}^2}$),
+                        zlabel = Time (s),
                         view = {0}{90},
                         colormap/viridis,
                         grid = both,
@@ -515,7 +518,7 @@
                 \end{axis}
             \end{tikzpicture}
 
-            \caption{Radial and tangential components of acceleration (meters per second squared)}\label{actuatorAccel2D}
+            \caption{Radial and tangential components of acceleration}\label{actuatorAccel2D}
         \end{figure}
 
 
