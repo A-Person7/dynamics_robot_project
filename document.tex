@@ -68,7 +68,7 @@
 	\caption{Given initial conditions (Units in m)\footnotemark}}
 \end{figure}
 
-\footnotetext{Fitz, Timothy, Robot Arm Project}
+\footnotetext{Fitzgerald, Timothy, Robot Arm Project}
 
  \newline 
     For our purposes, we will define the origin to be O, the pivot point of the robot arm. Let $f\left(t\right)$ be the function representing the free fall of the egg. Both $y$ and $f$ are defined as the height above this origin point, in meters. This means $y\left(t\right)$ must satisfy the following conditions:
@@ -445,7 +445,7 @@
 
 	\section*{Discussion of Results}
 
-        We can combine the components of acceleration shown in Fig. \ref{actuatorAccel3D} and \ref{actuatorAccel2D} with the mass of the egg to determine the forces our solution would impose on an actual actuator. Assuming the mass of the actuator's sliding component and the egg do not exceed 1 kg (likely a conservative estimate), we can get away with an actuator that can exert 20 Newtons of force. The actuator would need to start exerting this force very quickly, though, as radial acceleration starts around 20 meters per second squared. This means the maximum force of the actuator we select would probably need to be higher, and we'd have to look at the force curves to ensure it is capable of this feat. Of course, this actuator would need to have a compressed length about 0.5 meters or less, and a lengthened length of about 0.7 meters or more to fulfill the movement curve, as can be seen in Fig. \ref{figRadius}.
+        We can combine the components of acceleration shown in Fig. \ref{actuatorAccel3D} and \ref{actuatorAccel2D} with the mass of the egg to determine the forces our solution would impose on an actual actuator using $\vec{F} = m\vec{a}$. Assuming the mass of the actuator's sliding component and the egg do not exceed 1 kg (likely a conservative estimate), we can get away with an actuator that can exert 20 Newtons of force. The actuator would need to start exerting this force very quickly, though, as radial acceleration starts around 20 meters per second squared. This means the maximum force of the actuator we select would probably need to be higher, and we'd have to look at the force curves to ensure it is capable of this feat. Of course, this actuator would need to have a compressed length about 0.5 meters or less, and a lengthened length of about 0.7 meters or more to fulfill the movement curve, as can be seen in Fig. \ref{figRadius}.
 
         The part that makes us less optimistic about actually creating this is the tangential acceleration component. Multiplying the second time derivative of the angle with the radius at that moment in time gives us a sideways acceleration. Assuming the linear actuator is rigid, it will need to resist shear and a bending moment, the maximum magnitude of which we can calculate.
 
