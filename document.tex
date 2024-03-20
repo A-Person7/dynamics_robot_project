@@ -525,5 +525,10 @@
         If we were to actually implement this, our solution is set up in such a way that it can be quickly calculated with the given points. Therefore, to allow me to easily update the arm project as it goes, we would likely set these points up as constant values at compile\footnote{For higher level micro-controllers it is possible to use Python, an interpreted language. One could also use MATLAB, another interpreted language. On the one hand, MATLAB lends itself well to matrix calculation. On the other hand, it's MATLAB. Compiled languages like C++ and libraries like \href{https://github.com/g-truc/glm}{glm} allow us to use \texttt{constexpr} to perform linear algebra computations during compile time, which avoids unnecessary computations on the micro-controller at run-time.} time, which allows us to easily adjust and fine-tune our solution path if we need to (if we find we need to catch the egg a little earlier, for example).
 
 	% needs data of actuators
-	
+
+    \appendix
+
+    \section{Code}
+    Code for this document can be found at \href{https://github.com/A-Person7/dynamics_robot_project}{https://github.com/A-Person7/dynamics_robot_project}, and is written in \LaTeX with the help of \textttt{pgfplots}.
+
 \end{document}
